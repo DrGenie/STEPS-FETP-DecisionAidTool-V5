@@ -1,336 +1,893 @@
-<!-- technical-appendix.html -->
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>STEPS Technical Appendix – FETP India</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>STEPS Technical Appendix — Methods, Tabs, Results and Assumptions</title>
+  <meta name="description" content="Lay-friendly and technical documentation for the STEPS decision aid (Scalable Training Estimation and Planning System) for FETP India." />
+
   <style>
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      margin: 0;
-      padding: 18px 14px 40px;
-      background: #f3f4f6;
-      color: #111827;
+    :root{
+      --bg:#f6f8fb;
+      --card:#ffffff;
+      --text:#0b1220;
+      --muted:#4b5565;
+      --line:#e5e7ee;
+      --brand:#0b57d0;
+      --brand-2:#0a7a67;
+      --warn:#b45309;
+      --ok:#166534;
+      --bad:#991b1b;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
     }
-    .page {
-      max-width: 900px;
-      margin: 0 auto;
-      background: #ffffff;
-      padding: 18px 20px 24px;
-      border-radius: 18px;
-      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.2);
+    html,body{height:100%;}
+    body{
+      margin:0;
+      font-family: var(--sans);
+      color:var(--text);
+      background:var(--bg);
+      line-height:1.55;
     }
-    h1, h2, h3 {
-      margin-top: 0;
+    a{color:var(--brand);text-decoration:none;}
+    a:hover{text-decoration:underline;}
+    .topbar{
+      position:sticky; top:0; z-index:10;
+      background:#fff;
+      border-bottom:1px solid var(--line);
     }
-    h1 {
-      font-size: 22px;
-      margin-bottom: 6px;
+    .topbar-inner{
+      max-width:1100px; margin:0 auto;
+      padding:14px 16px;
+      display:flex; gap:14px; align-items:center; justify-content:space-between;
     }
-    h2 {
-      font-size: 18px;
-      margin-top: 18px;
-      border-bottom: 1px solid #e5e7eb;
-      padding-bottom: 4px;
+    .brand{
+      display:flex; flex-direction:column;
     }
-    h3 {
-      font-size: 15px;
-      margin-top: 14px;
+    .brand h1{
+      margin:0; font-size:18px; letter-spacing:0.2px;
     }
-    p {
-      font-size: 13px;
-      line-height: 1.5;
+    .brand p{
+      margin:2px 0 0; font-size:12.5px; color:var(--muted);
     }
-    code {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 12px;
-      background: #f3f4f6;
-      padding: 1px 4px;
-      border-radius: 4px;
+    .actions{
+      display:flex; gap:8px; align-items:center; flex-wrap:wrap;
     }
-    .math-block {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 12px;
-      background: #f9fafb;
-      padding: 6px 8px;
-      border-radius: 6px;
-      border: 1px solid #e5e7eb;
-      margin: 6px 0 8px;
-      white-space: pre-wrap;
+    .btn{
+      border:1px solid var(--line);
+      background:#fff;
+      padding:8px 10px;
+      border-radius:10px;
+      font-size:13px;
+      cursor:pointer;
     }
-    ul, ol {
-      font-size: 13px;
-      line-height: 1.5;
+    .btn.primary{
+      border-color:rgba(11,87,208,0.25);
+      background:rgba(11,87,208,0.08);
+      color:var(--brand);
+      font-weight:600;
     }
-    .note {
-      background: #eff6ff;
-      border-left: 3px solid #2563eb;
-      padding: 6px 8px;
-      border-radius: 6px;
-      font-size: 12px;
-      margin: 8px 0;
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:18px 16px 60px;
+      display:grid;
+      grid-template-columns: 280px 1fr;
+      gap:16px;
+    }
+    .nav{
+      position:sticky; top:72px;
+      align-self:start;
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+    }
+    .nav h2{
+      margin:0 0 8px;
+      font-size:13px;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+    }
+    .nav a{
+      display:block;
+      padding:7px 8px;
+      border-radius:10px;
+      font-size:13.5px;
+      color:var(--text);
+    }
+    .nav a:hover{background:rgba(11,87,208,0.06); text-decoration:none;}
+    .nav .sub{margin-left:8px; border-left:2px solid var(--line); padding-left:8px;}
+    .content{
+      min-width:0;
+    }
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:16px;
+      margin-bottom:12px;
+    }
+    .card h2{
+      margin:0 0 10px;
+      font-size:18px;
+    }
+    .card h3{
+      margin:16px 0 8px;
+      font-size:15.5px;
+    }
+    .card p{margin:10px 0;}
+    .tag{
+      display:inline-block;
+      padding:2px 8px;
+      border-radius:999px;
+      font-size:12px;
+      border:1px solid var(--line);
+      color:var(--muted);
+      background:#fff;
+      vertical-align:middle;
+    }
+    .callout{
+      border:1px solid rgba(11,87,208,0.25);
+      background:rgba(11,87,208,0.06);
+      border-radius:12px;
+      padding:12px;
+      margin:12px 0;
+    }
+    .callout strong{color:var(--brand);}
+    .callout.warn{
+      border-color: rgba(180,83,9,0.35);
+      background: rgba(180,83,9,0.08);
+    }
+    .callout.warn strong{color:var(--warn);}
+    .callout.ok{
+      border-color: rgba(22,101,52,0.25);
+      background: rgba(22,101,52,0.06);
+    }
+    .callout.ok strong{color:var(--ok);}
+    .grid2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    .grid3{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 980px){
+      .wrap{grid-template-columns:1fr;}
+      .nav{position:relative; top:auto;}
+      .grid2,.grid3{grid-template-columns:1fr;}
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin:10px 0;
+      font-size:13.5px;
+    }
+    th, td{
+      border-bottom:1px solid var(--line);
+      padding:8px 8px;
+      vertical-align:top;
+      text-align:left;
+    }
+    th{
+      font-size:12.5px;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:0.06em;
+      background:rgba(0,0,0,0.02);
+    }
+    code, pre{
+      font-family: var(--mono);
+      font-size:12.5px;
+    }
+    pre{
+      background:#0b1220;
+      color:#e9eefc;
+      padding:12px;
+      border-radius:12px;
+      overflow:auto;
+    }
+    .kpi{
+      display:flex; flex-direction:column; gap:2px;
+      padding:12px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:#fff;
+    }
+    .kpi .label{font-size:12px;color:var(--muted); text-transform:uppercase; letter-spacing:0.06em;}
+    .kpi .value{font-size:18px;font-weight:700;}
+    .kpi .note{font-size:12.5px;color:var(--muted);}
+    .pill{
+      display:inline-block;
+      padding:3px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:600;
+      border:1px solid var(--line);
+    }
+    .pill.ok{background:rgba(22,101,52,0.08); color:var(--ok); border-color:rgba(22,101,52,0.18);}
+    .pill.bad{background:rgba(153,27,27,0.08); color:var(--bad); border-color:rgba(153,27,27,0.18);}
+    .pill.neutral{background:rgba(11,87,208,0.06); color:var(--brand); border-color:rgba(11,87,208,0.18);}
+    .foot{
+      color:var(--muted);
+      font-size:12.5px;
+      margin-top:8px;
+    }
+    .hr{border:none; border-top:1px solid var(--line); margin:14px 0;}
+    .toc-small{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:12.5px;
+    }
+    @media print{
+      .topbar, .nav {display:none;}
+      body{background:#fff;}
+      .wrap{max-width:none; padding:0; grid-template-columns:1fr;}
+      .card{border:0; border-radius:0; padding:0 0 10px;}
+      a{color:#000; text-decoration:none;}
     }
   </style>
 </head>
+
 <body>
-<div class="page">
-  <h1>STEPS Technical Appendix – FETP India</h1>
-  <p>
-    This appendix describes how STEPS combines discrete choice experiment (DCE) results, cost templates
-    and epidemiological multipliers to produce endorsement, willingness to pay, cost, benefit and national
-    simulation outputs for Field Epidemiology Training Program (FETP) scale up options in India.
-  </p>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <h1>STEPS Technical Appendix</h1>
+        <p>Plain-language guide + technical notes for FETP India scale-up scenarios</p>
+      </div>
+      <div class="actions">
+        <button class="btn primary" type="button" onclick="window.print()">Print / Save PDF</button>
+        <a class="btn" href="#quick-start" role="button">Quick start</a>
+        <a class="btn" href="#assumptions" role="button">Assumptions</a>
+      </div>
+    </div>
+  </div>
 
-  <h2>1. Preference model and utility specification</h2>
-  <p>
-    The DCE asked respondents to choose between alternative FETP designs and an opt out option.
-    Choices are modelled using a mixed logit specification with a lognormal cost coefficient.
-    For respondent <code>n</code>, choice task <code>t</code> and alternative <code>j</code>,
-    indirect utility is written as:
-  </p>
-  <div class="math-block">
-U<sub>ntj</sub> = V<sub>ntj</sub> + ε<sub>ntj</sub>,
-  </div>
-  <p>
-    where <code>V_ntj</code> is the systematic component of utility and <code>ε_ntj</code> is an i.i.d.
-    extreme value type I error term.
-  </p>
+  <div class="wrap">
+    <aside class="nav" aria-label="Appendix navigation">
+      <h2>Contents</h2>
+      <a href="#quick-start">Quick start</a>
+      <a href="#what-steps-is">What STEPS is</a>
+      <a href="#tabs">What each tab means</a>
+      <div class="sub">
+        <a href="#tab-overview">Overview</a>
+        <a href="#tab-framework">Framework</a>
+        <a href="#tab-settings">Settings</a>
+        <a href="#tab-configuration">Configuration</a>
+        <a href="#tab-results">Results</a>
+        <a href="#tab-costing">Costing</a>
+        <a href="#tab-national">National results</a>
+        <a href="#tab-sensitivity">Perceived programme value / Sensitivity</a>
+        <a href="#tab-copilot">Copilot / ChatGPT briefing</a>
+        <a href="#tab-scenarios">Scenarios</a>
+      </div>
 
-  <p>
-    In STEPS the systematic utility of an FETP programme option is specified as:
-  </p>
-  <div class="math-block">
-V = α<sub>A</sub> · ASC<sub>A</sub>
-  + β<sub>PT,int</sub> · PT<sub>int</sub>
-  + β<sub>PT,adv</sub> · PT<sub>adv</sub>
-  + β<sub>INC,univ</sub> · INC<sub>univ</sub>
-  + β<sub>INC,govpath</sub> · INC<sub>govpath</sub>
-  + β<sub>MEN,med</sub> · MEN<sub>med</sub>
-  + β<sub>MEN,high</sub> · MEN<sub>high</sub>
-  + β<sub>MOD,in</sub> · MOD<sub>in</sub>
-  + β<sub>MOD,online</sub> · MOD<sub>online</sub>
-  + β<sub>RESP,15</sub> · RESP<sub>15</sub>
-  + β<sub>RESP,7</sub> · RESP<sub>7</sub>
-  + β<sub>cost,n</sub> · cost<sub>000</sub>.
-  </div>
-  <p>
-    Attributes are coded as dummy variables relative to clearly defined reference categories:
-    frontline training, government and partner certificate, low mentorship, blended delivery,
-    and response within 30 days. The term <code>ASC_A</code> is equal to one for any programme configuration
-    and zero for the opt out alternative. The opt out alternative has its own constant <code>ASC_OptOut</code>.
-  </p>
+      <a href="#key-concepts">Key concepts explained</a>
+      <div class="sub">
+        <a href="#endorsement">Endorsement and opt-out</a>
+        <a href="#ppv">Perceived programme value</a>
+        <a href="#costs">Direct vs economic costs</a>
+        <a href="#epi">Epidemiological benefits</a>
+        <a href="#capacity">Capacity and feasibility</a>
+        <a href="#bcr-net">BCR and net benefit</a>
+      </div>
 
-  <h3>Lognormal cost coefficient</h3>
-  <p>
-    To ensure a strictly negative marginal utility of cost, the cost coefficient is modelled as lognormal.
-    Let <code>mcost_n</code> denote the latent normal term for respondent <code>n</code>:
-  </p>
-  <div class="math-block">
-mcost<sub>n</sub> ~ Normal(μ<sub>mcost</sub>, σ<sub>mcost</sub><sup>2</sup>)
-β<sub>cost,n</sub> = -exp(mcost<sub>n</sub>).
-  </div>
-  <p>
-    The mean of the lognormal term is
-  </p>
-  <div class="math-block">
-E[exp(mcost<sub>n</sub>)] = exp(μ<sub>mcost</sub> + 0.5 σ<sub>mcost</sub><sup>2</sup>),
-  </div>
-  <p>
-    so the representative cost coefficient used in STEPS is
-  </p>
-  <div class="math-block">
-b<sub>cost,MXL</sub> = -exp(μ<sub>mcost</sub> + 0.5 σ<sub>mcost</sub><sup>2</sup>).
-  </div>
-  <p>
-    All non cost coefficients in the utility function are set equal to their mixed logit means.
-    In practice STEPS uses back transformed mean values that match the lognormal specification
-    but are simple to implement in the browser.
-  </p>
+      <a href="#assumptions">Assumptions and recommended ranges</a>
+      <a href="#worked-example">Worked example (step by step)</a>
+      <a href="#technical-details">Technical details (for analysts)</a>
+      <a href="#faq">FAQ and interpretation tips</a>
+      <a href="#governance">Good practice for meetings and decision-making</a>
+    </aside>
 
-  <h3>Latent class model</h3>
-  <p>
-    In addition to the mixed logit model, STEPS uses the second class from a two class latent class logit model
-    to represent a supportive stakeholder group. This class has its own alternative specific constants, attribute
-    coefficients and cost coefficient. Users can switch between the average mixed logit model and this supportive
-    latent class group to explore how endorsement and benefits change when focusing on relatively supportive stakeholders.
-  </p>
+    <main class="content">
+      <section class="card" id="quick-start">
+        <h2>Quick start <span class="tag">for non-technical users</span></h2>
+        <ol>
+          <li><strong>Go to Settings</strong> and confirm the planning horizon, discount rate, completion rate, and outbreak values.</li>
+          <li><strong>Go to Configuration</strong> and choose programme tier, mentorship intensity, delivery mode, number of cohorts, trainees per cohort, and cost per trainee per month.</li>
+          <li>Click <strong>Apply configuration</strong> to update Results, Costing and National results.</li>
+          <li>Click <strong>Save scenario</strong> to store it, then build 2–4 alternative scenarios (for example, low vs high mentorship, different cohorts, blended vs online).</li>
+          <li><strong>Go to Scenarios</strong> to compare saved scenarios, shortlist your preferred options and export Excel/PDF (Standard or Brief 2 pages).</li>
+          <li><strong>Use Copilot / ChatGPT briefing</strong> to produce a policy-ready summary for meetings.</li>
+        </ol>
 
-  <h2>2. Endorsement probabilities</h2>
-  <p>
-    For any candidate programme configuration <code>s</code>, STEPS constructs the corresponding vector of attribute dummies
-    and cost, and evaluates the programme utility:
-  </p>
-  <div class="math-block">
-V<sub>prog,s</sub> = V<sub>noncost,s</sub> + b<sub>cost</sub> · cost<sub>000,s</sub>.
-  </div>
-  <p>
-    The opt out alternative has utility
-  </p>
-  <div class="math-block">
-V<sub>optout</sub> = α<sub>OptOut</sub> · ASC<sub>OptOut</sub> + b<sub>cost</sub> · cost<sub>000,opt</sub>,
-  </div>
-  <p>
-    with the attribute vector taken from the experimental design. Using a simple two alternative logit,
-    the probability of endorsing programme <code>s</code> rather than opting out is
-  </p>
-  <div class="math-block">
-P<sub>uptake,s</sub> = exp(V<sub>prog,s</sub>) /
-                     [exp(V<sub>prog,s</sub>) + exp(V<sub>optout</sub>)].
-  </div>
-  <p>
-    Endorsement in STEPS is reported as <code>100 × P_uptake,s</code> percent. The remaining percentage
-    is labelled “opt out” in the interface.
-  </p>
+        <div class="callout ok">
+          <strong>Best practice for meetings:</strong> shortlist 3 scenarios: one “baseline”, one “ambitious scale”, and one “high-quality mentorship” scenario. Export the Brief PDF and use the assumptions box as a slide backup.
+        </div>
+      </section>
 
-  <h3>Worked example – endorsement</h3>
-  <p>
-    Consider a configuration with advanced tier, government career pathway, high mentorship,
-    blended delivery, response within 7 days and a cost of 100,000 INR per trainee per month.
-    The non cost utility is the sum of the relevant mixed logit means:
-  </p>
-  <div class="math-block">
-V<sub>noncost,s</sub> = α<sub>A</sub> + β<sub>PT,adv</sub> + β<sub>INC,govpath</sub>
-                     + β<sub>MEN,high</sub> + β<sub>RESP,7</sub>.
-  </div>
-  <p>
-    Using the numerical values in the manuscript this yields approximately 1.67.
-    The cost term is <code>b_cost,MXL × 100</code>. The programme utility is then
-    <code>V_prog,s = 1.67 + b_cost,MXL × 100</code>. Combined with the pre computed
-    <code>V_optout</code>, STEPS converts this into an endorsement percentage through
-    the logit formula above.
-  </p>
+      <section class="card" id="what-steps-is">
+        <h2>What STEPS is (and what it is not)</h2>
+        <div class="grid2">
+          <div>
+            <h3>STEPS is a decision aid</h3>
+            <p>
+              STEPS helps you compare alternative FETP scale-up configurations. It combines: (i) a preference model that predicts
+              endorsement and perceived programme value; (ii) transparent costing (direct vs economic costs) including mentor support;
+              and (iii) an indicative epidemiological benefits module.
+            </p>
+            <ul>
+              <li>It is designed for transparency: assumptions are visible and exports can stand alone.</li>
+              <li>It supports scenario planning: you can save options and compare them side by side.</li>
+              <li>It supports feasibility: it estimates mentor needs and flags capacity gaps.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>STEPS is a decision-support and scenario-analysis tool</h3>
+            <p>
+              The tool does not claim to predict real-world outbreaks or budgets with certainty. It provides structured comparisons
+              under stated assumptions, so decision-makers can discuss trade-offs clearly.
+            </p>
+            <div class="callout warn">
+              <strong>Important:</strong> results are only as credible as the assumptions (costs, completion rates, outbreaks per graduate, value per outbreak) you input. Always treat outputs as scenario-based estimates, not guarantees.
+            </div>
+          </div>
+        </div>
 
-  <h2>3. Willingness to pay and benefits</h2>
-  <p>
-    Willingness to pay (WTP) values are derived from the mixed logit model as the marginal rate of substitution
-    between each attribute and cost. For an attribute with coefficient <code>β_k</code> and a cost coefficient
-    <code>β_cost</code>, the WTP for that attribute level is:
-  </p>
-  <div class="math-block">
-WTP<sub>k</sub> = -β<sub>k</sub> / β<sub>cost</sub>.
-  </div>
-  <p>
-    WTP is expressed in thousand rupees per trainee per month. STEPS stores a table of WTP values for each
-    attribute level and sums them to obtain the total WTP for a configuration:
-  </p>
-  <div class="math-block">
-WTP<sub>total</sub> =
-  WTP<sub>tier</sub> +
-  WTP<sub>career</sub> +
-  WTP<sub>mentorship</sub> +
-  WTP<sub>delivery</sub> +
-  WTP<sub>response</sub>.
-  </div>
-  <p>
-    In the Results tab the model uses this combined WTP per trainee per month to derive
-    an indicative benefit per cohort:
-  </p>
-  <div class="math-block">
-Benefit per cohort =
-  WTP<sub>total</sub> × duration (months)
-  × graduates per cohort
-  × endorsement.
-  </div>
-  <p>
-    Total indicative benefit across all cohorts is the benefit per cohort multiplied by
-    the number of cohorts. This value, together with total cost, defines the benefit cost ratio
-    and net benefit reported in the tool.
-  </p>
+        <p class="toc-small">
+          STEPS outputs are best used alongside operational planning (NCDC staffing plans, site readiness assessments, faculty/mentor rosters, and budget constraints).
+        </p>
+      </section>
 
-  <h2>4. Cost templates and economic cost</h2>
-  <p>
-    Cost templates are based on submissions from WHO, NIE and NCDC. For each tier the template
-    contains line items for staff, travel, training materials, management and other components.
-  </p>
-  <p>
-    STEPS treats these templates as alternative settings rather than combining them. When a template is selected
-    the tool calculates the share of total programme cost (excluding opportunity cost) represented by each component.
-    For a given configuration, programme cost per cohort is:
-  </p>
-  <div class="math-block">
-Programme cost per cohort =
-  cost per trainee per month × duration × trainees per cohort.
-  </div>
-  <p>
-    This is allocated across components according to the shares in the template. If the opportunity cost toggle
-    is turned on, the tool adds:
-  </p>
-  <div class="math-block">
-Opportunity cost per cohort =
-  opportunity cost per trainee per month × duration × trainees per cohort.
-  </div>
-  <p>
-    Total economic cost per cohort is the sum of programme cost and opportunity cost.
-    Multiplying by the number of cohorts yields total cost for the configuration.
-  </p>
+      <section class="card" id="tabs">
+        <h2>What each tab means</h2>
 
-  <h2>5. Epidemiological multipliers</h2>
-  <p>
-    The Advanced settings tab includes multipliers that summarise the expected contribution of graduates
-    to outbreak responses and broader health system benefits:
-  </p>
-  <ul>
-    <li>Outbreak responses per graduate per year, by tier.</li>
-    <li>Monetary value assigned to an avoided or managed outbreak.</li>
-    <li>Monetary value per FETP graduate (system strengthening effects).</li>
-  </ul>
-  <p>
-    For a configuration with <code>G</code> graduates and endorsement <code>P_uptake</code>, the implied
-    number of outbreak responses per year is:
-  </p>
-  <div class="math-block">
-Outbreak responses per year =
-  G × response multiplier (tier specific) × P<sub>uptake</sub>.
+        <section id="tab-overview">
+          <h3>Overview</h3>
+          <p>
+            A plain-language introduction to the purpose of the tool and what each module does. Use this tab to orient new meeting participants.
+          </p>
+        </section>
+
+        <section id="tab-framework">
+          <h3>Framework</h3>
+          <p>
+            Explains the policy levers and programme attributes represented in STEPS (tier, incentives, mentorship intensity, delivery mode, response time, cost).
+            These match the attributes used in the preference study that underpins endorsement and perceived programme value.
+          </p>
+        </section>
+
+        <section id="tab-settings">
+          <h3>Settings</h3>
+          <p>
+            Global assumptions used for all scenarios. These include epidemiological values (outbreak responses per graduate, value per outbreak), planning horizon, discount rate,
+            completion rate, opportunity cost settings, mentor cost base, capacity inputs and the One Health / cross-sector multiplier.
+          </p>
+          <p>
+            Settings are intentionally visible because exported results should be interpretable without opening the tool.
+          </p>
+        </section>
+
+        <section id="tab-configuration">
+          <h3>Configuration</h3>
+          <p>
+            Where you build one scenario at a time. Choose programme tier and design features, specify scale (cohorts and trainees),
+            and specify the direct cost per trainee per month (INR). The opportunity cost switch determines whether economic costs include trainee time cost.
+          </p>
+          <p>
+            Click <strong>Apply configuration</strong> to compute results. Click <strong>Save scenario</strong> to store the scenario for comparison and export.
+          </p>
+        </section>
+
+        <section id="tab-results">
+          <h3>Results</h3>
+          <p>
+            The main interpretation panel. It reports endorsement, opt-out share, perceived programme value outputs, cost totals, epidemiological benefits and feasibility checks.
+          </p>
+          <p>
+            Use this tab for discussion: “What do stakeholders value?”, “What is the scale implication?”, “Do we have enough mentors?”, and “Do benefits exceed costs under these assumptions?”
+          </p>
+        </section>
+
+        <section id="tab-costing">
+          <h3>Costing</h3>
+          <p>
+            Shows direct cost, economic cost and opportunity cost breakdowns per cohort and nationally (all cohorts).
+            Direct costs exclude opportunity cost; economic costs include it when the toggle is ON.
+          </p>
+        </section>
+
+        <section id="tab-national">
+          <h3>National results</h3>
+          <p>
+            Aggregates across all cohorts. Useful for national planning discussions: total costs and total epidemiological benefits over the planning horizon,
+            plus net benefit and BCR at national scale.
+          </p>
+        </section>
+
+        <section id="tab-sensitivity">
+          <h3>Perceived programme value / Sensitivity</h3>
+          <p>
+            Allows you to explore how results change if epidemiological assumptions change (for example, outbreak value or outbreak responses per graduate).
+            It can also show different “benefit definitions” (for example, outbreak benefits only, or perceived value plus outbreak benefits) to support deliberation.
+          </p>
+        </section>
+
+        <section id="tab-copilot">
+          <h3>Copilot / ChatGPT briefing</h3>
+          <p>
+            Generates a pre-filled prompt that includes your selected scenarios, assumptions and feasibility outputs.
+            The goal is to produce a policy-ready brief (or slide-ready summary) with a compact table and plain-language narrative.
+          </p>
+        </section>
+
+        <section id="tab-scenarios">
+          <h3>Scenarios</h3>
+          <p>
+            A comparison table for saved scenarios. You can shortlist scenarios for export, view snapshots, and export Excel/PDF.
+            The “Brief (2 pages)” PDF is designed specifically for meetings.
+          </p>
+        </section>
+      </section>
+
+      <section class="card" id="key-concepts">
+        <h2>Key concepts explained</h2>
+
+        <section id="endorsement">
+          <h3>Endorsement and opt-out</h3>
+          <p>
+            <strong>Endorsement</strong> is the predicted share of stakeholders who would choose a configured FETP option rather than an opt-out alternative, based on the preference study.
+            <strong>Opt-out share</strong> is 100% minus endorsement.
+          </p>
+          <div class="callout">
+            <strong>How to interpret:</strong> If endorsement is high, the option aligns well with stakeholder preferences (for example, higher mentorship intensity may increase endorsement even if costs rise).
+          </div>
+          <p class="foot">
+            Technical note: endorsement is computed from the preference model (mixed logit or MNL) using the chosen attributes and cost.
+          </p>
+        </section>
+
+        <section id="ppv">
+          <h3>Perceived programme value</h3>
+          <p>
+            STEPS reports <strong>Perceived programme value per trainee per month</strong>. This is an <em>implicit valuation</em> derived from stated preferences in the discrete choice experiment.
+            It is not a fee, and no one is expected to pay it. It is a way to summarise how much stakeholders value the package of programme features, on a rupee scale.
+          </p>
+          <div class="callout warn">
+            <strong>Interpretation rule:</strong> use perceived programme value to compare options (relative differences), not as a procurement price or a budget request.
+          </div>
+          <p>
+            STEPS also reports total perceived programme value per cohort (and total across all cohorts), which is computed by scaling the per-trainee-per-month value by cohort size and programme duration.
+          </p>
+        </section>
+
+        <section id="costs">
+          <h3>Direct costs vs economic costs (including mentor cost)</h3>
+          <p>
+            STEPS separates costs into:
+          </p>
+          <ul>
+            <li><strong>Direct cost:</strong> financial cost of delivery (plus mentor support cost), excluding opportunity cost.</li>
+            <li><strong>Economic cost:</strong> direct cost plus opportunity cost of trainee time <em>when the opportunity cost switch is ON</em>.</li>
+          </ul>
+          <p>
+            A new explicit component is <strong>Mentor support cost</strong>. In Settings you input a base cost per cohort, and STEPS applies a multiplier by mentorship intensity:
+            Low = 1.0, Medium = 1.3, High = 1.7.
+          </p>
+          <div class="grid3">
+            <div class="kpi">
+              <div class="label">Direct cost</div>
+              <div class="value">Delivery + mentor</div>
+              <div class="note">Excludes opportunity cost</div>
+            </div>
+            <div class="kpi">
+              <div class="label">Economic cost</div>
+              <div class="value">Direct + opportunity</div>
+              <div class="note">Only if toggle ON</div>
+            </div>
+            <div class="kpi">
+              <div class="label">Mentor support</div>
+              <div class="value">Base × multiplier</div>
+              <div class="note">Linked to mentorship intensity</div>
+            </div>
+          </div>
+        </section>
+
+        <section id="epi">
+          <h3>Epidemiological benefits</h3>
+          <p>
+            Epidemiological benefits represent the value of improved outbreak responses enabled by FETP graduates over the planning horizon.
+            The structure is intentionally simple and transparent:
+          </p>
+          <ul>
+            <li>Compute expected graduates = cohorts × trainees per cohort × completion rate.</li>
+            <li>Compute annual outbreak responses supported = graduates × outbreaks per graduate per year.</li>
+            <li>Compute outbreak value = annual outbreaks supported × value per outbreak, projected across the planning horizon, discounted by the discount rate.</li>
+          </ul>
+          <p>
+            If you use the <strong>Cross-sector benefit multiplier</strong> (One Health), STEPS multiplies epidemiological benefits by that factor (for example, 1.2 means “20% higher benefits to reflect cross-sector spillovers”).
+            This multiplier does <strong>not</strong> change endorsement or perceived programme value.
+          </p>
+        </section>
+
+        <section id="capacity">
+          <h3>Capacity and feasibility checks</h3>
+          <p>
+            STEPS estimates mentor needs based on cohort size and mentorship intensity.
+            Mentor capacity assumptions:
+          </p>
+          <ul>
+            <li>Low mentorship: 5 fellows per mentor</li>
+            <li>Medium mentorship: 3.5 fellows per mentor</li>
+            <li>High mentorship: 2 fellows per mentor</li>
+          </ul>
+          <p>
+            It then computes required mentors per cohort and nationally:
+          </p>
+          <ul>
+            <li>Required mentors per cohort = ceil(trainees per cohort ÷ mentor capacity)</li>
+            <li>Required total mentors nationally = required mentors per cohort × number of cohorts</li>
+          </ul>
+          <p>
+            If required mentors exceed <strong>Available mentors nationally</strong> (Settings), STEPS flags “Requires capacity expansion” and shows the shortfall.
+            Optional training sites inputs can flag whether cohort counts exceed site throughput.
+          </p>
+
+          <div class="callout">
+            <strong>How to use this:</strong> feasibility flags are not “stop signs”; they are prompts for planning (mentor recruitment, hub expansion, phased rollout).
+          </div>
+        </section>
+
+        <section id="bcr-net">
+          <h3>BCR and net benefit</h3>
+          <p>
+            STEPS computes:
+          </p>
+          <ul>
+            <li><strong>Net benefit</strong> = total epidemiological benefits − total economic costs</li>
+            <li><strong>Benefit-cost ratio (BCR)</strong> = total epidemiological benefits ÷ total economic costs</li>
+          </ul>
+          <p>
+            Interpretation:
+          </p>
+          <ul>
+            <li>If net benefit is positive, benefits exceed costs under the chosen assumptions.</li>
+            <li>If BCR > 1, benefits exceed costs in ratio terms.</li>
+            <li>Use sensitivity analysis to see how robust these outputs are to uncertain assumptions.</li>
+          </ul>
+        </section>
+      </section>
+
+      <section class="card" id="assumptions">
+        <h2>Assumptions and recommended ranges <span class="tag">guidance</span></h2>
+
+        <p>
+          STEPS is built to make assumptions explicit. Below are practical suggestions for setting and interpreting each key parameter.
+          The “right” value depends on programme design, context and the decision question.
+        </p>
+
+        <table aria-label="Assumption guidance table">
+          <thead>
+            <tr>
+              <th>Assumption</th>
+              <th>What it means</th>
+              <th>How it affects results</th>
+              <th>Practical guidance</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Planning horizon (years)</strong></td>
+              <td>How many years you project benefits and costs.</td>
+              <td>Longer horizons increase total benefits (and can increase total costs if you interpret costs annually).</td>
+              <td>Use 5–10 years for typical planning; use 10+ for longer health security investment cases.</td>
+            </tr>
+            <tr>
+              <td><strong>Discount rate (%)</strong></td>
+              <td>Reduces the present value of future costs and benefits.</td>
+              <td>Higher discount rates reduce long-horizon benefits more strongly.</td>
+              <td>Use the rate aligned with government guidance. Test 3% and 5% in sensitivity.</td>
+            </tr>
+            <tr>
+              <td><strong>Completion rate (%)</strong></td>
+              <td>Share of trainees completing and becoming graduates.</td>
+              <td>Higher completion → more graduates → higher benefits.</td>
+              <td>Use observed completion rates from prior cohorts, by tier if available.</td>
+            </tr>
+            <tr>
+              <td><strong>Outbreak responses per graduate per year</strong></td>
+              <td>How many major outbreak responses one graduate supports annually.</td>
+              <td>Directly scales benefits.</td>
+              <td>Use conservative values unless evidence supports higher. Test a low and high scenario.</td>
+            </tr>
+            <tr>
+              <td><strong>Value per outbreak (INR)</strong></td>
+              <td>Monetary value of improved response to a large outbreak.</td>
+              <td>Directly scales benefits; biggest driver of net benefit.</td>
+              <td>Use literature or country estimates when available; otherwise include a range in sensitivity (for example, ₹10m–₹50m).</td>
+            </tr>
+            <tr>
+              <td><strong>Non-outbreak value per graduate (optional)</strong></td>
+              <td>Annual value from surveillance and routine contributions.</td>
+              <td>Adds benefits even outside outbreaks.</td>
+              <td>Only use if you have defensible evidence; otherwise keep at 0 and discuss qualitatively.</td>
+            </tr>
+            <tr>
+              <td><strong>Opportunity cost per trainee per month</strong></td>
+              <td>Value of trainee time (what they could do otherwise).</td>
+              <td>Increases economic cost when toggle is ON.</td>
+              <td>Use payroll-based estimates or conservative time-value proxies; toggle OFF if presenting purely budget costs.</td>
+            </tr>
+            <tr>
+              <td><strong>Mentor support cost per cohort (base)</strong></td>
+              <td>Explicit cost of mentorship support per cohort (supervision time, travel, honoraria, coordination).</td>
+              <td>Raises direct and economic costs; scaled by mentorship intensity multiplier.</td>
+              <td>Set based on actual mentorship programme budgets. If uncertain, test ±25% and compare feasibility.</td>
+            </tr>
+            <tr>
+              <td><strong>Cross-sector benefit multiplier</strong></td>
+              <td>Applies only to epidemiological benefits to reflect One Health/cross-sector spillovers.</td>
+              <td>Scales benefits, not preference outputs.</td>
+              <td>Use 1.0 by default; only increase with a clear rationale and document it in notes.</td>
+            </tr>
+            <tr>
+              <td><strong>Available mentors nationally</strong></td>
+              <td>Current mentor pool capacity.</td>
+              <td>Determines feasibility status and shortfall.</td>
+              <td>Use roster-based counts of active mentors. Update yearly.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout warn">
+          <strong>Decision tip:</strong> if a scenario has excellent endorsement and benefits but fails feasibility checks, treat it as a “target state” and design a phased plan (for example, medium mentorship first, expand mentor pool, then move to high mentorship).
+        </div>
+      </section>
+
+      <section class="card" id="worked-example">
+        <h2>Worked example (step by step) <span class="tag">illustrative numbers</span></h2>
+        <p>
+          This example uses simple round numbers to show how STEPS computes core outputs.
+          These numbers are for explanation only; your tool outputs will differ based on your inputs.
+        </p>
+
+        <h3>Example configuration</h3>
+        <table aria-label="Worked example inputs">
+          <thead><tr><th>Input</th><th>Example value</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>Programme tier</td><td>Advanced</td><td>Assume duration = 12 months (tool’s internal tier mapping).</td></tr>
+            <tr><td>Mentorship intensity</td><td>Medium</td><td>Mentor multiplier 1.3; mentor capacity 3.5 fellows/mentor.</td></tr>
+            <tr><td>Cohorts</td><td>10</td><td>National scale across planning period.</td></tr>
+            <tr><td>Trainees per cohort</td><td>35</td><td>Total trainees = 350.</td></tr>
+            <tr><td>Cost per trainee per month (INR)</td><td>60,000</td><td>Direct delivery cost input.</td></tr>
+            <tr><td>Mentor support cost per cohort (base)</td><td>500,000</td><td>Scaled by multiplier.</td></tr>
+            <tr><td>Completion rate</td><td>85%</td><td>From Settings.</td></tr>
+            <tr><td>Outbreaks per graduate per year</td><td>0.8</td><td>From Settings.</td></tr>
+            <tr><td>Value per outbreak (INR)</td><td>25,000,000</td><td>From Settings.</td></tr>
+            <tr><td>Planning horizon</td><td>10 years</td><td>From Settings.</td></tr>
+            <tr><td>Discount rate</td><td>3%</td><td>From Settings.</td></tr>
+            <tr><td>Opportunity cost toggle</td><td>ON</td><td>Economic cost includes opportunity cost.</td></tr>
+            <tr><td>Cross-sector multiplier</td><td>1.0</td><td>No extra spillover assumed.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Step 1: Programme delivery cost per cohort</h3>
+        <p>
+          Delivery cost per cohort = cost per trainee per month × trainees per cohort × duration in months.
+          If duration is 12 months:
+        </p>
+        <pre>Delivery cost per cohort = 60,000 × 35 × 12 = 25,200,000 INR</pre>
+
+        <h3>Step 2: Mentor cost per cohort</h3>
+        <p>
+          Mentor cost per cohort = base mentor cost × mentorship multiplier.
+        </p>
+        <pre>Mentor cost per cohort = 500,000 × 1.3 = 650,000 INR</pre>
+
+        <h3>Step 3: Direct cost per cohort</h3>
+        <pre>Direct cost per cohort = delivery cost + mentor cost
+= 25,200,000 + 650,000
+= 25,850,000 INR</pre>
+
+        <h3>Step 4: Economic cost per cohort</h3>
+        <p>
+          If opportunity cost toggle is ON, add trainee time value (opportunity cost per trainee per month × trainees × duration).
+          Suppose opportunity cost per trainee per month = 25,000 INR:
+        </p>
+        <pre>Opportunity cost per cohort = 25,000 × 35 × 12 = 10,500,000 INR
+Economic cost per cohort = direct cost + opportunity cost
+= 25,850,000 + 10,500,000
+= 36,350,000 INR</pre>
+
+        <h3>Step 5: Graduates over the horizon</h3>
+        <pre>Total trainees = 10 × 35 = 350
+Expected graduates = 350 × 0.85 = 297.5 ≈ 298 graduates</pre>
+
+        <h3>Step 6: Outbreak responses supported per year</h3>
+        <pre>Annual outbreaks supported = graduates × outbreaks per graduate
+= 298 × 0.8 ≈ 238.4 outbreaks per year</pre>
+
+        <h3>Step 7: Outbreak benefits (discounted)</h3>
+        <p>
+          In a simple approximation without discounting:
+        </p>
+        <pre>Annual outbreak value ≈ 238.4 × 25,000,000 ≈ 5,960,000,000 INR per year</pre>
+        <p>
+          STEPS discounts future benefits over the planning horizon using the discount rate. The discounted total will be lower than “annual × years”.
+          Discounting matters most when horizons are long.
+        </p>
+
+        <h3>Step 8: Net benefit and BCR</h3>
+        <p>
+          National economic cost = economic cost per cohort × cohorts:
+        </p>
+        <pre>National economic cost = 36,350,000 × 10 = 363,500,000 INR</pre>
+        <p>
+          Net benefit and BCR:
+        </p>
+        <pre>Net benefit = total discounted benefits − total economic cost
+BCR = total discounted benefits ÷ total economic cost</pre>
+
+        <div class="callout">
+          <strong>How to use the worked example:</strong> the goal is to understand the structure. In the tool, exports list all assumptions and computed values so you can replicate the logic transparently.
+        </div>
+      </section>
+
+      <section class="card" id="technical-details">
+        <h2>Technical details (for analysts)</h2>
+
+        <h3>1) Preference model outputs: endorsement and perceived programme value</h3>
+        <p>
+          STEPS uses a preference model (Mixed Logit baseline, with an optional MNL). The inputs are attribute levels selected in the Configuration tab plus the cost level.
+        </p>
+        <ul>
+          <li><strong>Endorsement</strong> is computed from the model’s choice probabilities for the configured alternative relative to opt-out.</li>
+          <li><strong>Perceived programme value per trainee per month</strong> is computed by translating attribute utility into a rupee metric using the cost coefficient (i.e., a “willingness-to-pay style” conversion). In UI and exports we label this explicitly as perceived value derived from stated preferences.</li>
+        </ul>
+        <div class="callout warn">
+          <strong>Analyst caution:</strong> do not treat perceived programme value as a market price or a budget. It is a welfare/valuation signal from stated preference data.
+        </div>
+
+        <h3>2) Cost functions</h3>
+        <p><strong>Delivery cost per cohort</strong> is computed from:</p>
+        <pre>delivery_cost_per_cohort = cost_per_trainee_per_month × trainees_per_cohort × duration_months(tier)</pre>
+
+        <p><strong>Mentor cost per cohort</strong> is computed from:</p>
+        <pre>mentor_multiplier = {low:1.0, medium:1.3, high:1.7}[mentorship]
+mentor_cost_per_cohort = base_mentor_cost_per_cohort × mentor_multiplier</pre>
+
+        <p><strong>Direct cost per cohort</strong>:</p>
+        <pre>direct_cost_per_cohort = delivery_cost_per_cohort + mentor_cost_per_cohort</pre>
+
+        <p><strong>Opportunity cost per cohort</strong> (applied only if toggle ON):</p>
+        <pre>opp_cost_per_cohort = opp_cost_per_trainee_per_month × trainees_per_cohort × duration_months(tier)</pre>
+
+        <p><strong>Economic cost per cohort</strong>:</p>
+        <pre>economic_cost_per_cohort = direct_cost_per_cohort + (opp_toggle ? opp_cost_per_cohort : 0)</pre>
+
+        <h3>3) Epidemiological module and discounting</h3>
+        <p>
+          Conceptually:
+        </p>
+        <pre>graduates = cohorts × trainees_per_cohort × completion_rate
+annual_outbreaks_supported = graduates × outbreaks_per_graduate_per_year
+annual_benefit = annual_outbreaks_supported × value_per_outbreak
+total_discounted_benefit = Σ_{t=1..H} (annual_benefit / (1 + r)^t)</pre>
+        <p>
+          If non-outbreak value is used, it is included as an additional annual stream per graduate (or graduate-years) depending on the tool’s internal implementation.
+        </p>
+        <p>
+          Cross-sector multiplier is applied to epidemiological benefits only:
+        </p>
+        <pre>epi_benefit_adjusted = epi_benefit × cross_sector_multiplier</pre>
+
+        <h3>4) Capacity check</h3>
+        <pre>mentor_capacity = {low:5, medium:3.5, high:2}[mentorship]
+mentors_per_cohort = ceil(trainees_per_cohort / mentor_capacity)
+total_mentors_required = mentors_per_cohort × cohorts
+shortfall = max(0, total_mentors_required − available_mentors)</pre>
+
+        <h3>5) Feasibility status logic</h3>
+        <p>
+          A simple flag:
+        </p>
+        <pre>
+if shortfall == 0:
+  status = "Within current capacity"
+else:
+  status = "Requires capacity expansion"
+        </pre>
+        <p>
+          Optional site capacity:
+        </p>
+        <pre>
+if sites > 0 and max_cohorts_per_site > 0:
+  site_capacity = sites × max_cohorts_per_site
+  site_gap = max(0, cohorts − site_capacity)
+        </pre>
+
+        <h3>6) National aggregation</h3>
+        <pre>
+national_cost = economic_cost_per_cohort × cohorts
+national_benefit = total_discounted_benefit (already based on total graduates)
+national_net_benefit = national_benefit − national_cost
+national_bcr = national_benefit / national_cost
+        </pre>
+
+        <h3>7) Sensitivity analysis</h3>
+        <p>
+          Sensitivity recomputes benefits and net benefits under alternative assumptions while holding preference model outputs constant.
+          Benefit definitions exist to support decision discussions, not to assert one “correct” welfare metric.
+        </p>
+      </section>
+
+      <section class="card" id="faq">
+        <h2>FAQ and interpretation tips</h2>
+
+        <h3>Why can endorsement be high while net benefit is low?</h3>
+        <p>
+          Endorsement reflects stakeholder preferences (including quality features), while net benefit depends mainly on cost and epidemiological value assumptions.
+          A high-quality, high-mentorship scenario may be preferred but expensive; if outbreak values are set conservatively, net benefits can appear low.
+        </p>
+
+        <h3>How should we choose between direct cost and economic cost?</h3>
+        <p>
+          Use <strong>direct cost</strong> when planning budgets and financial feasibility. Use <strong>economic cost</strong> when presenting a broader societal perspective that includes trainee time.
+          STEPS always reports both; exports show whether opportunity cost is included.
+        </p>
+
+        <h3>What does “Perceived programme value” mean in meetings?</h3>
+        <p>
+          It means “how much stakeholders value the configuration”, expressed in rupee terms via the preference model.
+          Use it as a communication device for preference strength; do not treat it as a procurement or payroll number.
+        </p>
+
+        <h3>What if the capacity check says ‘Requires capacity expansion’?</h3>
+        <p>
+          That is a planning prompt: consider (i) phased rollout; (ii) mentor recruitment/training; (iii) hub expansion; or (iv) selecting a mentorship intensity that is feasible today.
+          Save alternative scenarios to compare trade-offs.
+        </p>
+
+        <h3>How should we use the cross-sector multiplier?</h3>
+        <p>
+          Leave it at 1.0 unless you have a defensible reason to incorporate cross-sector spillovers (e.g., animal health, environmental surveillance).
+          If you raise it above 1.0, explain the rationale in the export notes and sensitivity tab.
+        </p>
+      </section>
+
+      <section class="card" id="governance">
+        <h2>Good practice for meetings and decision-making</h2>
+        <ul>
+          <li><strong>Always export with assumptions visible.</strong> Use the Brief PDF for meetings; keep Excel for analysts.</li>
+          <li><strong>Use scenarios to structure trade-offs.</strong> At minimum compare: baseline, scale expansion, and high-mentorship quality scenario.</li>
+          <li><strong>Interpret the preference model as “support”, not “truth”.</strong> Endorsement and perceived programme value represent preferences under the study design.</li>
+          <li><strong>Test robustness.</strong> Use sensitivity to check how results change with different outbreak values and completion assumptions.</li>
+          <li><strong>Use feasibility flags to design implementation plans.</strong> Shortfalls are actionable: mentor pipeline, hub planning, staged cohorts.</li>
+        </ul>
+
+        <div class="callout ok">
+          <strong>Meeting template suggestion:</strong> Start with the Brief PDF. Discuss (1) endorsement, (2) costs and feasibility, (3) benefits and net benefit under baseline assumptions, then (4) sensitivity ranges.
+        </div>
+
+        <p class="foot">
+          Document version: this appendix is intended to be stored alongside the STEPS tool files in the same GitHub repository. You can link to it from the tool’s Overview tab or README.
+        </p>
+      </section>
+    </main>
   </div>
-  <p>
-    STEPS reports this as an epidemiological summary and uses the monetary values to provide a qualitative
-    sense of the scale of health system benefits. The primary economic metrics in the tool remain the
-    WTP based benefit, benefit cost ratio and net benefit.
-  </p>
 
-  <h2>6. National simulation</h2>
-  <p>
-    National simulation results are simple extensions of the cohort level calculations:
-  </p>
-  <ul>
-    <li>Total graduates are the sum across all cohorts.</li>
-    <li>Total cost and total indicative benefit are summed across cohorts.</li>
-    <li>Net benefit is the difference between total indicative benefit and total cost.</li>
-    <li>Outbreak responses per year are calculated from the total number of graduates and their multipliers.</li>
-  </ul>
-  <p>
-    These outputs are intended to support discussions of national scale up options and trade offs,
-    not to replace detailed epidemiological or budget impact models.
-  </p>
-
-  <h2>7. Worked end to end example</h2>
-  <p>
-    As a concrete illustration, consider the following configuration:
-  </p>
-  <ul>
-    <li>Advanced programme tier (24 months).</li>
-    <li>Government career pathway as the incentive.</li>
-    <li>High mentorship (maximum two fellows per mentor).</li>
-    <li>Blended delivery.</li>
-    <li>Response within 7 days.</li>
-    <li>Cost of 100,000 INR per trainee per month.</li>
-    <li>Twenty trainees per cohort, ten cohorts.</li>
-  </ul>
-  <ol>
-    <li>STEPS constructs the attribute vector for this configuration and evaluates programme utility using the mixed logit means and the representative cost coefficient.</li>
-    <li>It retrieves the pre computed opt out utility from the design and converts the difference into an endorsement probability.</li>
-    <li>Using the WTP table, it calculates WTP per trainee per month for advanced tier, government career pathway, high mentorship, blended delivery and response within 7 days, and sums these to obtain total WTP.</li>
-    <li>Graduates are calculated as trainees per cohort times completion rate, multiplied by the number of cohorts.</li>
-    <li>Indicative benefits are obtained by combining WTP, duration, graduates and endorsement; total cost is based on cost per trainee, duration, trainees, cohorts and the cost template.</li>
-    <li>The benefit cost ratio and net benefit are then reported, alongside endorsement and outbreak response figures, in the main STEPS interface.</li>
-  </ol>
-
-  <div class="note">
-    All calculations in STEPS are deterministic and transparent. The Advanced settings panel and assumption log
-    are designed to make it straightforward to document which parameter values were used in any given workshop
-    or analysis.
-  </div>
-</div>
+  <script>
+    // Lightweight helper: smooth scroll for in-page nav
+    (function(){
+      const links = document.querySelectorAll('a[href^="#"]');
+      for (const a of links){
+        a.addEventListener('click', (e) => {
+          const id = a.getAttribute('href');
+          if (!id || id === '#') return;
+          const el = document.querySelector(id);
+          if (!el) return;
+          e.preventDefault();
+          el.scrollIntoView({behavior:'smooth', block:'start'});
+          history.pushState(null,'',id);
+        });
+      }
+    })();
+  </script>
 </body>
 </html>
