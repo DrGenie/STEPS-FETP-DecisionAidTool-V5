@@ -116,7 +116,7 @@ let COST_CONFIG = null;
 
 const DEFAULT_EPI_SETTINGS = {
   general: {
-    planningHorizonYears: 5,
+    planningHorizonYears: 1,
     inrToUsdRate: 83,
     epiDiscountRate: 0.03
   },
